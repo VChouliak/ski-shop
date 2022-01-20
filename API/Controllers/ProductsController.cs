@@ -1,6 +1,5 @@
-using Infrastructure.Data;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -8,24 +7,25 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly StoreContext _context;
 
-        public ProductsController(StoreContext context)
-        {
+        private readonly IProductRepository _context;
+
+        public ProductsController(IProductRepository context)
+        {            
             _context = context;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetProducts()
         {
-            var products = await _context.Products.ToListAsync();            
-            return products is not null ? Ok( products): BadRequest("Some thing went wrong....");
+            var products = await _context.GetProductsAsync();
+            return products is not null ? Ok(products) : BadRequest("Some thing went wrong....");
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct(int id)
         {
-            var result = await _context.Products.FindAsync(id);
+            var result = await _context.GetProductByIdAsync(id);
             return result is not null ? Ok(result) : NotFound($"Product was not found");
         }
     }
