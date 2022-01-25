@@ -1,4 +1,6 @@
+using API.Extensions;
 using API.Helpers;
+using API.Middleware;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -9,41 +11,23 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddEndpointsApiExplorer().AddSwaggerGen();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<StoreContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
+builder.Services.AddCustomModelStateResponse();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseMigrationsAtStartAndSeedData();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var loggerFactory = services.GetService<ILoggerFactory>();
-    var logger = loggerFactory.CreateLogger<Program>();
-    try
-    {
-        var context = services.GetRequiredService<StoreContext>();
-        await context.Database.MigrateAsync();
-        await StoreContextSeed.SeedAsync(context, loggerFactory);
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "An error occured during migration");
-    }
+app.UseSwagerDocumentation();
 
+app.UseMiddleware<ExceptionMiddleware>();
 
-}
-
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseHttpsRedirection();
 

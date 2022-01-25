@@ -1,4 +1,6 @@
+using System.Net;
 using API.DTO;
+using API.Errors;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
@@ -6,10 +8,8 @@ using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
-{
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+{ 
+    public class ProductsController : BaseApiController
     {
 
 
@@ -30,7 +30,10 @@ namespace API.Controllers
             {
                 return Ok(_mapper.Map<IReadOnlyList<Product>, List<ProductDTO>>(products));
             }
-            return BadRequest("It was not possible to get a Productslist");
+            else if(!products.Any()){
+                return NotFound(new ApiResponse(404, "Productlist is empty, no data was found"));
+            }
+            return StatusCode((int)HttpStatusCode.InternalServerError,  new ApiResponse(500));
         }
 
         [HttpGet("{id}")]
@@ -41,7 +44,7 @@ namespace API.Controllers
             {
                 return Ok(_mapper.Map<Product, ProductDTO>(product));
             }
-            return NotFound("Product not found");
+            return NotFound(new ApiResponse(404, "Product was not found"));
         }
     }
 }
