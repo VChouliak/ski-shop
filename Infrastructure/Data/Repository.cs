@@ -13,7 +13,12 @@ namespace Infrastructure.Data
         {
             _context = context;
         }
-   
+
+        public async Task<int> CountAsync(ISpecification<T>? specification)
+        {
+            return await ApplySpecification(specification).CountAsync();
+        }
+
         public async Task<T> GetEntityAsync(ISpecification<T> specification)
         {
             return await ApplySpecification(specification).FirstOrDefaultAsync();
