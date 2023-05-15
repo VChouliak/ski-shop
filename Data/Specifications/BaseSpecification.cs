@@ -11,9 +11,13 @@ namespace Data.Specifications
             Criteria = criteria;
         }
 
+        public BaseSpecification()
+        {
+        }
+
         public Expression<Func<TEntity, bool>> Criteria { get; }
 
-        public List<Expression<Func<TEntity, object>>> Includes => new List<Expression<Func<TEntity, object>>>();
+        public List<Expression<Func<TEntity, object>>> Includes {get; } = new List<Expression<Func<TEntity, object>>>();
 
         public Expression<Func<TEntity, object>> OrderBy { get; private set; }
 

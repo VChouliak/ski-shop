@@ -6,7 +6,8 @@ namespace Core.Interfaces.Data.Repository
     public interface IBaseAsyncRepository<TEntity> where TEntity : BaseEntity
     {
         Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> GetAllAsync(ISpecification<TEntity> specification);
         Task<TEntity> GetEntityWithSpecification(ISpecification<TEntity> specification);
-        //TODO: Etend with other Methods later.
+        //TODO: Extend with other Methods later.
     }
 }
