@@ -7,7 +7,7 @@ namespace Core.Interfaces.Data.Repository
     {
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<IEnumerable<TEntity>> GetAllAsync(ISpecification<TEntity> specification);
-        Task<TEntity> GetEntityWithSpecification(ISpecification<TEntity> specification);
+        Task<TEntity> GetEntityWithSpecificationAsync(ISpecification<TEntity> specification);
         //TODO: Extend with other Methods later.
     }
 }

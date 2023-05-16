@@ -24,7 +24,7 @@ namespace Data.Repositories
             return await ApplySpecification(specification).ToListAsync();
         }
 
-        public async Task<TEntity> GetEntityWithSpecification(ISpecification<TEntity> specification)
+        public async Task<TEntity> GetEntityWithSpecificationAsync(ISpecification<TEntity> specification)
         {
             return await ApplySpecification(specification).FirstOrDefaultAsync();
         }

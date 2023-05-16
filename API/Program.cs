@@ -1,3 +1,4 @@
+using API.Helpers;
 using Core.Interfaces.Data.Repository;
 using Core.Interfaces.Data.Specification;
 using Core.Interfaces.Service.Data;
@@ -16,6 +17,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 builder.Services.AddDbContext<DbContext, StoreContext>();
 builder.Services.AddScoped(typeof(IBaseAsyncRepository<>), typeof(BaseAsyncRepository<>));

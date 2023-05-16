@@ -7,5 +7,6 @@
   },
     "ConnectionStrings": {
       "SqliteConnection":"Data source=skishop.db"
-    }
+    },
+    "ApiUrl": "https://localhost:7097"
 }

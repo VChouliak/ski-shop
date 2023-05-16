@@ -28,7 +28,12 @@ namespace Data.Specifications
 
             if (specification.OrderBy != null)
             {
-                query.OrderBy(specification.OrderBy);
+                query = query.OrderBy(specification.OrderBy);
+            }
+
+            if (specification.GroupBy != null)
+            {
+                query = query.GroupBy(specification.GroupBy).SelectMany(x => x);
             }
 
             if (specification.IsPagingEnabled)
@@ -39,5 +44,5 @@ namespace Data.Specifications
 
             return query;
         }
-    }    
+    }
 }

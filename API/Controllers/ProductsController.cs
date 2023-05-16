@@ -1,3 +1,5 @@
+using API.DTOs;
+using AutoMapper;
 using Core.Entities;
 using Core.Interfaces.Service.Data;
 using Data.Specifications;
@@ -10,25 +12,29 @@ namespace API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IBaseAsyncDataService _dataService;
+        private readonly IMapper _mapper;
 
-        public ProductsController(IBaseAsyncDataService dataService)
+        public ProductsController(IBaseAsyncDataService dataService, IMapper mapper)
         {
             _dataService = dataService;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetProducts()
         {
             var products = await _dataService.Repository<Product>().GetAllAsync(new ProductsWithTypesAndBrandsSpecification());            
-            return Ok(products);
+            
+            return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDTO>>(products));
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetProduct(int id)
+        public async Task<IActionResult> GetProduct(int id)
         {
-            var product = _dataService.Repository<Product>().GetEntityWithSpecification(new ProductsWithTypesAndBrandsSpecification(product => product.Id == id)) ;
-            return Ok(product);
+            var product = await _dataService.Repository<Product>().GetEntityWithSpecificationAsync(new ProductsWithTypesAndBrandsSpecification(product => product.Id == id)) ;
+           
+            return Ok(_mapper.Map<Product,ProductToReturnDTO>(product));
         }
     }
 }

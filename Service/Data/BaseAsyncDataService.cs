@@ -22,12 +22,12 @@ namespace Service.Data
             await _context.DisposeAsync();
         }
 
-        public bool HasChanges()
+        public virtual bool HasChanges()
         {
             return _context.ChangeTracker.HasChanges();
         }
 
-        public IBaseAsyncRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity
+        public virtual IBaseAsyncRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity
         {
             if (_repositories == null)
             {
@@ -46,7 +46,7 @@ namespace Service.Data
             return _repositories[type] as IBaseAsyncRepository<TEntity>;
         }
 
-        public async Task SaveAsync()
+        public virtual async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
         }

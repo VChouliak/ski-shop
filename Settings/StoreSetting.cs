@@ -6,7 +6,9 @@ namespace Settings
     {
         private static StoreSetting _instance = null;
         private static readonly object padlock = new object();
-        public string _sqliteConnectionString = string.Empty;
+        private string _sqliteConnectionString = string.Empty;
+        private string _apiUrl = String.Empty;
+
 
         private StoreSetting()
         {
@@ -33,15 +35,22 @@ namespace Settings
             get => _sqliteConnectionString;
         }
 
-        private void InitializeSettings(){
+        public string ApiUrl
+        {
+            get => _apiUrl;
+        }
+
+        private void InitializeSettings()
+        {
             var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetParent(Directory.GetCurrentDirectory()).ToString())
             .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"), optional: false)
             .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.Development.json"), optional: false)
-            .AddJsonFile(Path.Combine("Settings","StoreSettings.json"), optional: false)
+            .AddJsonFile(Path.Combine("Settings", "StoreSettings.json"), optional: false)
             .Build();
 
             _sqliteConnectionString = configuration.GetSection("ConnectionStrings").GetSection("SqliteConnection").Value;
+            _apiUrl = configuration.GetSection("ApiUrl").Value;
         }
 
     }
