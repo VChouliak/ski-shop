@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseApiController
     {
         private readonly IBaseAsyncDataService _dataService;
         private readonly IMapper _mapper;
@@ -23,18 +21,25 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProducts()
         {
-            var products = await _dataService.Repository<Product>().GetAllAsync(new ProductsWithTypesAndBrandsSpecification());            
-            
-            return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDTO>>(products));
+            var products = await _dataService.Repository<Product>().GetAllAsync(new ProductsWithTypesAndBrandsSpecification());
+            if (products != null)
+            {
+                return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDTO>>(products));
+            }
+            return BadRequest();
         }
 
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetProduct(int id)
         {
-            var product = await _dataService.Repository<Product>().GetEntityWithSpecificationAsync(new ProductsWithTypesAndBrandsSpecification(product => product.Id == id)) ;
-           
-            return Ok(_mapper.Map<Product,ProductToReturnDTO>(product));
+            var product = await _dataService.Repository<Product>().GetEntityWithSpecificationAsync(new ProductsWithTypesAndBrandsSpecification(product => product.Id == id));
+
+            if (product != null)
+            {
+                return Ok(_mapper.Map<Product, ProductToReturnDTO>(product));
+            }
+            return NotFound();
         }
     }
 }

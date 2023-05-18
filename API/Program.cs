@@ -1,4 +1,6 @@
+using API.Errors;
 using API.Helpers;
+using API.Middleware;
 using Core.Interfaces.Data.Repository;
 using Core.Interfaces.Data.Specification;
 using Core.Interfaces.Service.Data;
@@ -6,6 +8,7 @@ using Data.Repositories;
 using Data.Specifications;
 using Infrastructure.Data;
 using Infrastructure.Data.SeedData;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Service.Data;
 
@@ -23,6 +26,24 @@ builder.Services.AddDbContext<DbContext, StoreContext>();
 builder.Services.AddScoped(typeof(IBaseAsyncRepository<>), typeof(BaseAsyncRepository<>));
 builder.Services.AddTransient(typeof(ISpecification<>), typeof(BaseSpecification<>));
 builder.Services.AddScoped<IBaseAsyncDataService, BaseAsyncDataService>();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = actionContext =>
+    {
+        var errors = actionContext.ModelState.Where(error => error.Value.Errors.Count > 0)
+        .SelectMany(x => x.Value.Errors)
+        .Select(x => x.ErrorMessage)
+        .ToArray();
+
+        var errorResponse = new ApiValidationErrorResponse
+        {
+            Errors = errors
+        };
+
+        return new BadRequestObjectResult(errorResponse);
+    };
+});
 
 var app = builder.Build();
 
@@ -50,6 +71,10 @@ if (app.Environment.IsDevelopment())
         }
     }
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseHttpsRedirection();
 
