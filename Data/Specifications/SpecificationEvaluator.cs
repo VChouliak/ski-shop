@@ -15,20 +15,14 @@ namespace Data.Specifications
                 query = query.Where(specification.Criteria);
             }
 
-            query = specification.Includes.Aggregate(query, (current, include) => current.Include(include));
-
             if (specification.OrderBy != null)
             {
                 query = query.OrderBy(specification.OrderBy);
             }
-            else if (specification.OrderByDescending != null)
+
+            if (specification.OrderByDescending != null)
             {
                 query = query.OrderByDescending(specification.OrderByDescending);
-            }
-
-            if (specification.OrderBy != null)
-            {
-                query = query.OrderBy(specification.OrderBy);
             }
 
             if (specification.GroupBy != null)
@@ -42,6 +36,7 @@ namespace Data.Specifications
                     .Take(specification.Take);
             }
 
+            query = specification.Includes.Aggregate(query, (current, include) => current.Include(include));
             return query;
         }
     }

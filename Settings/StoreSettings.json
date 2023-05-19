@@ -1,12 +1,13 @@
-{  
+{
   "Logging": {
     "LogLevel": {
       "Default": "Information",
       "Microsoft.AspNetCore": "Warning"
     }
   },
-    "ConnectionStrings": {
-      "SqliteConnection":"Data source=skishop.db"
-    },
-    "ApiUrl": "https://localhost:7097"
+  "ConnectionStrings": {
+    "SqliteConnection": "Data source=skishop.db"
+  },
+  "ApiUrl": "https://localhost:7097",
+  "DatabaseProvider": "Microsoft.EntityFrameworkCore.Sqlite"
 }

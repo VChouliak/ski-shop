@@ -8,6 +8,7 @@ namespace Settings
         private static readonly object padlock = new object();
         private string _sqliteConnectionString = string.Empty;
         private string _apiUrl = String.Empty;
+        private string _databaseProvider = String.Empty;
 
 
         private StoreSetting()
@@ -40,6 +41,11 @@ namespace Settings
             get => _apiUrl;
         }
 
+        public string DatabaseProvider
+        {
+            get => _databaseProvider;
+        }
+
         private void InitializeSettings()
         {
             var configuration = new ConfigurationBuilder()
@@ -51,6 +57,7 @@ namespace Settings
 
             _sqliteConnectionString = configuration.GetSection("ConnectionStrings").GetSection("SqliteConnection").Value;
             _apiUrl = configuration.GetSection("ApiUrl").Value;
+            _databaseProvider = configuration.GetSection("DatabaseProvider").Value;
         }
 
     }
