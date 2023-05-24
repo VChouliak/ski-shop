@@ -9,6 +9,8 @@ namespace Settings
         private string _sqliteConnectionString = string.Empty;
         private string _apiUrl = String.Empty;
         private string _databaseProvider = String.Empty;
+        private string _corsHttpsOrigin = String.Empty;
+        private string _corsHttpOrigin = String.Empty;
 
 
         private StoreSetting()
@@ -46,6 +48,16 @@ namespace Settings
             get => _databaseProvider;
         }
 
+        public string CORSHttpsOrigin
+        {
+            get => _corsHttpsOrigin;
+        }
+
+        public string CORSHttpOrigin
+        {
+            get => _corsHttpOrigin;
+        }
+
         private void InitializeSettings()
         {
             var configuration = new ConfigurationBuilder()
@@ -58,6 +70,8 @@ namespace Settings
             _sqliteConnectionString = configuration.GetSection("ConnectionStrings").GetSection("SqliteConnection").Value;
             _apiUrl = configuration.GetSection("ApiUrl").Value;
             _databaseProvider = configuration.GetSection("DatabaseProvider").Value;
+            _corsHttpsOrigin = configuration.GetSection("CORSHttpsOrigin").Value;
+            _corsHttpOrigin = configuration.GetSection("CORSHttpOrigin").Value;
         }
 
     }

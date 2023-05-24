@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Service.Data;
 using Settings;
-
+//TODO:Clean class...
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -27,7 +27,10 @@ builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("CorsPolicy", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins(StoreSetting.Instance.ApiUrl);
+        policy
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .WithOrigins(StoreSetting.Instance.CORSHttpOrigin, StoreSetting.Instance.CORSHttpsOrigin);
     });
 });
 

@@ -9,5 +9,7 @@
     "SqliteConnection": "Data source=skishop.db"
   },
   "ApiUrl": "https://localhost:7097",
+  "CORSHttpsOrigin":  "https://localhost:4200",
+  "CORSHttpOrigin": "http://localhost:4200",
   "DatabaseProvider": "Microsoft.EntityFrameworkCore.Sqlite"
 }
