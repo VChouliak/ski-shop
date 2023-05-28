@@ -12,6 +12,9 @@ namespace API.Helpers
             .ForMember(destination => destination.ProductBrand, source => source.MapFrom(s => s.ProductBrand.Name))
             .ForMember(destination => destination.ProductType, source => source.MapFrom(s => s.ProductType.Name))
             .ForMember(destination => destination.PictureUrl, source => source.MapFrom<ProductUrlResolver>());
+
+            CreateMap<ProductBrand, ProductBrandToReturnDTO>();
+            CreateMap<ProductType, ProductTypeToReturnDTO>();
         }
     }
 }
