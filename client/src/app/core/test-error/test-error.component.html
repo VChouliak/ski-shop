@@ -1,0 +1,11 @@
+<div class="container mt-5">
+    <button (click)="getInternalServerError()" class="btn btn-outline-primary me-3">Test  Internal Server Error</button>
+    <button (click)="getBadRequestError()" class="btn btn-outline-primary me-3">Test  Bad Request Error</button>
+    <button (click)="getValidationError()" class="btn btn-outline-primary me-3">Test  Validation Error</button>
+    <button (click)="getNotFoundError()" class="btn btn-outline-primary me-3">Test  Not Found Error</button>
+    <div class="row mt-5" *ngIf="validationErrors">
+        <ul class="text-danger">
+            <li *ngFor="let error of validationErrors">{{error}}</li>
+        </ul>
+    </div>
+</div>
