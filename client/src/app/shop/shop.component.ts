@@ -12,7 +12,7 @@ import { ShopParams } from '../shared/models/shopParams';
 })
 export class ShopComponent implements OnInit {
 
-  @ViewChild('search') searchTerm?: ElementRef
+  @ViewChild('search', { static: false }) searchTerm?: ElementRef
 
   products?: IProduct[];
   productBrands?: IProductBrand[]
