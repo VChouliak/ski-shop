@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Service.Data;
 using Settings;
+using StackExchange.Redis;
 //TODO:Clean class...
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,18 @@ builder.Services.AddCors(opt =>
 builder.Services.AddDbContext<DbContext, StoreContext>();
 builder.Services.AddScoped(typeof(IBaseAsyncRepository<>), typeof(BaseAsyncRepository<>));
 builder.Services.AddTransient(typeof(ISpecification<>), typeof(BaseSpecification<>));
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 builder.Services.AddScoped<IBaseAsyncDataService, BaseAsyncDataService>();
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
+{
+    var configuration = ConfigurationOptions.Parse(StoreSetting.Instance.RedisConnectionString, true);
+   // configuration.AbortOnConnectFail = false;
+   // configuration.Ssl = true;
+    
+    return ConnectionMultiplexer.Connect(configuration);
+});
+
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -92,7 +104,7 @@ app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization(); 
+app.UseAuthorization();
 
 app.MapControllers();
 

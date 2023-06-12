@@ -11,6 +11,8 @@ namespace Settings
         private string _databaseProvider = String.Empty;
         private string _corsHttpsOrigin = String.Empty;
         private string _corsHttpOrigin = String.Empty;
+        private string _redisConnectionString = String.Empty;
+
 
 
         private StoreSetting()
@@ -58,6 +60,11 @@ namespace Settings
             get => _corsHttpOrigin;
         }
 
+        public string RedisConnectionString
+        {
+            get => _redisConnectionString;
+        }
+
         private void InitializeSettings()
         {
             var configuration = new ConfigurationBuilder()
@@ -72,6 +79,7 @@ namespace Settings
             _databaseProvider = configuration.GetSection("DatabaseProvider").Value;
             _corsHttpsOrigin = configuration.GetSection("CORSHttpsOrigin").Value;
             _corsHttpOrigin = configuration.GetSection("CORSHttpOrigin").Value;
+            _redisConnectionString = configuration.GetSection("ConnectionStrings").GetSection("RedisConnection").Value;
         }
 
     }

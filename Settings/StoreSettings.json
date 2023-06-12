@@ -6,7 +6,8 @@
     }
   },
   "ConnectionStrings": {
-    "SqliteConnection": "Data source=skishop.db"
+    "SqliteConnection": "Data source=skishop.db",
+    "RedisConnection": "localhost"
   },
   "ApiUrl": "https://localhost:7097",
   "CORSHttpsOrigin":  "https://localhost:4200",
