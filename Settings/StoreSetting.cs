@@ -12,6 +12,9 @@ namespace Settings
         private string _corsHttpsOrigin = String.Empty;
         private string _corsHttpOrigin = String.Empty;
         private string _redisConnectionString = String.Empty;
+        private string _identitySqliteConnectionString = String.Empty;
+        private string _tokenKey = String.Empty;
+        private string _tokenIssuer = String.Empty;
 
 
 
@@ -40,6 +43,11 @@ namespace Settings
             get => _sqliteConnectionString;
         }
 
+        public string IdentitySqliteConnectionString
+        {
+            get => _identitySqliteConnectionString;
+        }
+
         public string ApiUrl
         {
             get => _apiUrl;
@@ -65,6 +73,16 @@ namespace Settings
             get => _redisConnectionString;
         }
 
+        public string TokenKey
+        {
+            get => _tokenKey;
+        }
+
+        public string TokenIssuer
+        {
+            get => _tokenIssuer;
+        }
+
         private void InitializeSettings()
         {
             var configuration = new ConfigurationBuilder()
@@ -75,11 +93,14 @@ namespace Settings
             .Build();
 
             _sqliteConnectionString = configuration.GetSection("ConnectionStrings").GetSection("SqliteConnection").Value;
+            _identitySqliteConnectionString = configuration.GetSection("ConnectionStrings").GetSection("IdentitySqliteConnection").Value;
             _apiUrl = configuration.GetSection("ApiUrl").Value;
             _databaseProvider = configuration.GetSection("DatabaseProvider").Value;
             _corsHttpsOrigin = configuration.GetSection("CORSHttpsOrigin").Value;
             _corsHttpOrigin = configuration.GetSection("CORSHttpOrigin").Value;
             _redisConnectionString = configuration.GetSection("ConnectionStrings").GetSection("RedisConnection").Value;
+            _tokenKey = configuration.GetSection("Token").GetSection("Key").Value;
+            _tokenIssuer = configuration.GetSection("Token").GetSection("Issuer").Value;
         }
 
     }

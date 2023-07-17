@@ -1,19 +1,25 @@
 using API.Errors;
+using API.Extensions;
 using API.Helpers;
 using API.Middleware;
+using Core.Entities.Identity;
 using Core.Interfaces.Data.Repository;
 using Core.Interfaces.Data.Specification;
 using Core.Interfaces.Service.Data;
+using Core.Interfaces.Service.Identity;
 using Data.Repositories;
 using Data.Specifications;
 using Infrastructure.Data;
 using Infrastructure.Data.SeedData;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Service.Data;
+using Service.Identity;
 using Settings;
 using StackExchange.Redis;
-//TODO:Clean class...
+//TODO: refactor
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -35,11 +41,15 @@ builder.Services.AddCors(opt =>
     });
 });
 
+builder.Services.AddDbContext<AppIdentityDbContext, AppIdentityDbContext>();
 builder.Services.AddDbContext<DbContext, StoreContext>();
 builder.Services.AddScoped(typeof(IBaseAsyncRepository<>), typeof(BaseAsyncRepository<>));
 builder.Services.AddTransient(typeof(ISpecification<>), typeof(BaseSpecification<>));
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 builder.Services.AddScoped<IBaseAsyncDataService, BaseAsyncDataService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+builder.Services.AddIdentityServices();
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 {
@@ -87,6 +97,11 @@ if (app.Environment.IsDevelopment())
             var context = services.GetRequiredService<StoreContext>();
             await context.Database.MigrateAsync();
             await StoreContextSeed.SeedAsync(context, loggerFactory);
+
+            var userManager = services.GetRequiredService<UserManager<AppUser>>();
+            var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+            await identityContext.Database.MigrateAsync();
+            await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
         }
         catch (Exception ex)
         {
@@ -103,6 +118,8 @@ app.UseStatusCodePagesWithReExecute("/errors/{0}");
 app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

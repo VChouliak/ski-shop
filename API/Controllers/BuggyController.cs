@@ -1,5 +1,6 @@
 using API.Errors;
 using Core.Interfaces.Service.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers

@@ -7,10 +7,15 @@
   },
   "ConnectionStrings": {
     "SqliteConnection": "Data source=skishop.db",
-    "RedisConnection": "localhost"
+    "RedisConnection": "localhost",
+    "IdentitySqliteConnection": "Data source=identity.db"
+  },
+  "Token": {
+    "Key": "Very L0ng And V€ry $€cret Key th@t must be l@rger than 512 bits",
+    "Issuer": "https://localhost:7097"
   },
   "ApiUrl": "https://localhost:7097",
-  "CORSHttpsOrigin":  "https://localhost:4200",
+  "CORSHttpsOrigin": "https://localhost:4200",
   "CORSHttpOrigin": "http://localhost:4200",
   "DatabaseProvider": "Microsoft.EntityFrameworkCore.Sqlite"
 }
