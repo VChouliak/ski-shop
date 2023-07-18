@@ -37,7 +37,7 @@ namespace API.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(_mapper.Map<Address,AddressDTO>(user.Address));
+                return Ok(_mapper.Map<Address, AddressDTO>(user.Address));
             }
 
             return BadRequest("Can not update Useraddress");
@@ -71,6 +71,10 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDTO registerDto)
         {
+            if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
+            {
+                return new BadRequestObjectResult(new ApiValidationErrorResponse{Errors = new [] {"Email address is allready in use."}});
+            }
             var user = new AppUser
             {
                 DisplayName = registerDto.DisplayName,
